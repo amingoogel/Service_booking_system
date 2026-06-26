@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}حذف کاربر{% endblock %}
+{% block content %}
+<h2>حذف کاربر: {{ user_obj.username }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">حذف</button>
+    <a href="{% url 'accounts:admin_users' %}" class="btn btn-secondary">انصراف</a>
+</form>
+{% endblock %}
