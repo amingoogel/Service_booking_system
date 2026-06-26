@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}مدیریت کاربران{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+    <h2>مدیریت کاربران</h2>
+    <a href="{% url 'accounts:admin_user_create' %}" class="btn btn-primary">+ کاربر جدید</a>
+</div>
+<table class="table table-striped">
+    <thead><tr><th>نام کاربری</th><th>ایمیل</th><th>نقش</th><th>فعال</th><th>عملیات</th></tr></thead>
+    <tbody>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.get_role_display }}</td>
+        <td>{% if u.is_active %}بله{% else %}خیر{% endif %}</td>
+        <td>
+            <a href="{% url 'accounts:admin_user_edit' u.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
+            <a href="{% url 'accounts:admin_user_delete' u.pk %}" class="btn btn-sm btn-danger">حذف</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
