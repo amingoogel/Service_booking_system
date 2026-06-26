@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}حذف سرویس{% endblock %}
+{% block content %}
+<h2>حذف سرویس: {{ service.name }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>آیا مطمئن هستید؟</p>
+    <button type="submit" class="btn btn-danger">حذف</button>
+    <a href="{% url 'provider:service_list' %}" class="btn btn-secondary">انصراف</a>
+</form>
+{% endblock %}
