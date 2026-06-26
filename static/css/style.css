@@ -1,0 +1,6 @@
+body { font-family: Tahoma, Arial, sans-serif; }
+.service-img { height: 180px; object-fit: cover; }
+.nav-avatar { width: 28px; height: 28px; object-fit: cover; }
+.rating-stars { color: #ffc107; }
+.stat-card { border-right: 4px solid #0d6efd; }
+.countdown-timer { font-family: monospace; font-size: 1.1rem; color: #dc3545; }

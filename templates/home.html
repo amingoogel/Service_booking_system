@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}صفحه اصلی - رزرو خدمات{% endblock %}
+{% block content %}
+<div class="hero bg-primary text-white rounded-3 p-5 mb-4 text-center">
+    <h1 class="display-5">سیستم مدیریت و رزرو خدمات</h1>
+    <p class="lead">جستجو، رزرو و مدیریت خدمات به سادگی</p>
+    <a href="{% url 'services:list' %}" class="btn btn-light btn-lg">جستجوی سرویس‌ها</a>
+</div>
+
+<h3 class="mb-3">سرویس‌های پیشنهادی</h3>
+<div class="row g-4">
+    {% for service in featured_services %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ service.get_image_url }}" class="card-img-top service-img" alt="{{ service.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ service.name }}</h5>
+                <p class="text-muted small">{{ service.provider.get_full_name|default:service.provider.username }}</p>
+                <p class="rating-stars">★ {{ service.average_rating }} <small>({{ service.review_count }} نظر)</small></p>
+                <p class="fw-bold text-primary">{{ service.price|floatformat:0 }} تومان</p>
+                <a href="{% url 'services:detail' service.pk %}" class="btn btn-outline-primary btn-sm">مشاهده</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">سرویسی یافت نشد. ابتدا داده‌های نمونه را بارگذاری کنید.</p>
+    {% endfor %}
+</div>
+{% endblock %}
