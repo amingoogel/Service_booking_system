@@ -1,0 +1,21 @@
+{% if services %}
+<div class="row g-4">
+    {% for service in services %}
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ service.get_image_url }}" class="card-img-top service-img" alt="{{ service.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ service.name }}</h5>
+                <span class="badge bg-secondary">{{ service.category.name|default:"بدون دسته" }}</span>
+                <p class="text-muted small mt-2">{{ service.provider.get_full_name|default:service.provider.username }}</p>
+                <p class="rating-stars">★ {{ service.average_rating }} <small>({{ service.review_count }} نظر)</small></p>
+                <p>{{ service.duration_minutes }} دقیقه | {{ service.price|floatformat:0 }} تومان</p>
+                <a href="{% url 'services:detail' service.pk %}" class="btn btn-primary btn-sm">رزرو</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning text-center">نتیجه‌ای یافت نشد</div>
+{% endif %}

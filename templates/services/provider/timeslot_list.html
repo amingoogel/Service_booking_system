@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}بازه‌های {{ service.name }}{% endblock %}
+{% block content %}
+<h2>بازه‌های زمانی: {{ service.name }}</h2>
+<a href="{% url 'provider:timeslot_create' service.pk %}" class="btn btn-primary btn-sm mb-3">+ بازه جدید</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead><tr><th>شروع</th><th>پایان</th><th>فعال</th><th>رزرو شده</th><th>عملیات</th></tr></thead>
+        <tbody>
+        {% for slot in slots %}
+        <tr>
+            <td>{{ slot.start_datetime|date:"Y/m/d H:i" }}</td>
+            <td>{{ slot.end_datetime|date:"H:i" }}</td>
+            <td>{% if slot.is_active %}بله{% else %}خیر{% endif %}</td>
+            <td>{% if slot.is_booked %}بله{% else %}خیر{% endif %}</td>
+            <td>
+                <a href="{% url 'provider:timeslot_edit' service.pk slot.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
+                <a href="{% url 'provider:timeslot_toggle' service.pk slot.pk %}" class="btn btn-sm btn-secondary">{% if slot.is_active %}غیرفعال{% else %}فعال{% endif %}</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center">بازه‌ای تعریف نشده</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'provider:service_list' %}" class="btn btn-secondary">بازگشت</a>
+{% endblock %}

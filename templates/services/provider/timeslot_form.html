@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h2>{{ title }} - {{ service.name }}</h2>
+
+<div class="alert alert-info col-md-8">
+    مدت هر بازه برای این سرویس: <strong>{{ service.duration_minutes }} دقیقه</strong>
+    — فقط زمان شروع را انتخاب کنید؛ زمان پایان خودکار محاسبه می‌شود.
+</div>
+
+{% if form.non_field_errors %}
+<div class="alert alert-danger col-md-8">
+    {% for error in form.non_field_errors %}
+    <div>{{ error }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<form method="post" class="col-md-6">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3">
+        <label class="form-label">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+        {% if field.errors %}<div class="text-danger small">{{ field.errors.0 }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+    <a href="{% url 'provider:timeslot_list' service.pk %}" class="btn btn-secondary">بازگشت</a>
+</form>
+{% endblock %}

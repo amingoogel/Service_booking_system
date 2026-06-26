@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}مدیریت سرویس‌ها{% endblock %}
+{% block content %}
+<h2>مدیریت سرویس‌ها (ادمین)</h2>
+<table class="table table-striped">
+    <thead><tr><th>نام</th><th>ارائه‌دهنده</th><th>قیمت</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+    <tbody>
+    {% for service in services %}
+    <tr>
+        <td>{{ service.name }}</td>
+        <td>{{ service.provider.username }}</td>
+        <td>{{ service.price|floatformat:0 }}</td>
+        <td>{{ service.get_status_display }}</td>
+        <td>
+            <a href="{% url 'services:admin_edit' service.pk %}" class="btn btn-sm btn-warning">ویرایش</a>
+            <a href="{% url 'services:admin_delete' service.pk %}" class="btn btn-sm btn-danger">حذف</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
