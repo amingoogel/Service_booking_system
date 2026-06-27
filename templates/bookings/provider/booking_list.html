@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}رزروهای دریافتی{% endblock %}
+{% block content %}
+<h2>رزروهای دریافتی</h2>
+<a href="{% url 'reports:provider_bookings' %}" class="btn btn-outline-secondary btn-sm mb-3">دانلود PDF</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead><tr><th>فاکتور</th><th>سرویس</th><th>مشتری</th><th>تاریخ</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+        <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.invoice_number }}</td>
+            <td>{{ booking.service.name }}</td>
+            <td>{{ booking.customer.username }}</td>
+            <td>{{ booking.time_slot.start_datetime|date:"Y/m/d H:i" }}</td>
+            <td>{{ booking.get_status_display }}</td>
+            <td>
+                {% if booking.status == 'pending' %}
+                <form method="post" action="{% url 'provider:confirm_booking' booking.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-success btn-sm">تأیید</button></form>
+                <form method="post" action="{% url 'provider:reject_booking' booking.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-warning btn-sm">رد</button></form>
+                {% endif %}
+                {% if booking.status == 'confirmed' or booking.status == 'pending' %}
+                <form method="post" action="{% url 'provider:cancel_booking' booking.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئنید؟')">لغو</button></form>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">رزروی وجود ندارد</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

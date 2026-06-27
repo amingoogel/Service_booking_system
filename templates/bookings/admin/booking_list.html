@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}مدیریت رزروها{% endblock %}
+{% block content %}
+<h2>مدیریت رزروها</h2>
+<table class="table table-striped">
+    <thead><tr><th>فاکتور</th><th>مشتری</th><th>ارائه‌دهنده</th><th>سرویس</th><th>وضعیت</th><th>عملیات</th></tr></thead>
+    <tbody>
+    {% for booking in bookings %}
+    <tr>
+        <td>{{ booking.invoice_number }}</td>
+        <td>{{ booking.customer.username }}</td>
+        <td>{{ booking.provider.username }}</td>
+        <td>{{ booking.service.name }}</td>
+        <td>{{ booking.get_status_display }}</td>
+        <td>
+            {% if booking.status == 'pending' %}
+            <form method="post" action="{% url 'bookings:admin_force_confirm' booking.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-success">تأیید اجباری</button></form>
+            {% endif %}
+            {% if booking.status != 'canceled' %}
+            <form method="post" action="{% url 'bookings:admin_force_cancel' booking.pk %}" class="d-inline">{% csrf_token %}<button class="btn btn-sm btn-danger">لغو اجباری</button></form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
