@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}رزروهای من{% endblock %}
+{% block content %}
+<h2>رزروهای من</h2>
+<a href="{% url 'reports:customer_bookings' %}" class="btn btn-outline-secondary btn-sm mb-3">دانلود PDF</a>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>فاکتور</th><th>سرویس</th><th>تاریخ</th><th>وضعیت</th><th>پرداخت</th>
+                <th>مهلت لغو</th><th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.invoice_number }}</td>
+            <td>{{ booking.service.name }}</td>
+            <td>{{ booking.time_slot.start_datetime|date:"Y/m/d H:i" }}</td>
+            <td><span class="badge bg-info">{{ booking.get_status_display }}</span></td>
+            <td>{{ booking.get_payment_status_display }}</td>
+            <td>
+                {% if booking.can_cancel %}
+                <span class="countdown countdown-timer" data-seconds="{{ booking.seconds_until_cancel_deadline }}"></span>
+                {% else %}
+                <span class="text-muted">-</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if booking.can_cancel %}
+                <form method="post" action="{% url 'customer:cancel_booking' booking.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm cancel-btn">لغو رزرو</button>
+                </form>
+                {% endif %}
+                {% if booking.status == 'confirmed' and booking.payment_status == 'unpaid' %}
+                <a href="{% url 'payments:pay' booking.pk %}" class="btn btn-success btn-sm">پرداخت</a>
+                {% endif %}
+                {% if booking.status == 'confirmed' and booking.payment_status == 'paid' %}
+                <a href="{% url 'reports:invoice' booking.pk %}" class="btn btn-outline-primary btn-sm">فاکتور</a>
+                {% endif %}
+                {% if booking.status == 'confirmed' %}
+                    {% if booking.pk in reviewed_ids %}
+                    <span class="text-muted small">شما قبلاً نظر دادید</span>
+                    {% else %}
+                    <a href="{% url 'reviews:create' booking.pk %}" class="btn btn-warning btn-sm">ثبت نظر</a>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center">رزروی وجود ندارد</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="/static/js/countdown.js"></script>{% endblock %}
