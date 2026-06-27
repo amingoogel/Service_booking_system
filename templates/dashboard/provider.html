@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}داشبورد ارائه‌دهنده{% endblock %}
+{% block content %}
+<h2>داشبورد ارائه‌دهنده</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card stat-card p-3"><h4>{{ services_count }}</h4><small>سرویس‌ها</small></div></div>
+    <div class="col-md-4"><div class="card stat-card p-3"><h4>{{ total_bookings }}</h4><small>رزروها</small></div></div>
+    <div class="col-md-4"><div class="card stat-card p-3"><h4>{{ total_revenue|floatformat:0 }}</h4><small>درآمد (تومان)</small></div></div>
+</div>
+<canvas id="providerChart" height="120"></canvas>
+{% endblock %}
+{% block extra_js %}
+<script>
+new Chart(document.getElementById('providerChart'), {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{ data: {{ chart_data|safe }}, backgroundColor: ['#ffc107','#198754','#dc3545','#6c757d'] }]
+    }
+});
+</script>
+{% endblock %}

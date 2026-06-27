@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}داشبورد ادمین{% endblock %}
+{% block content %}
+<h2>داشبورد مدیریت</h2>
+<a href="{% url 'reports:admin_stats' %}" class="btn btn-outline-primary btn-sm mb-3">دانلود گزارش PDF</a>
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ total_users }}</h4><small>کل کاربران</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ providers_count }}</h4><small>ارائه‌دهندگان</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ customers_count }}</h4><small>مشتریان</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ total_bookings }}</h4><small>کل رزروها</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ daily_bookings }}</h4><small>رزرو امروز</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ weekly_bookings }}</h4><small>رزرو هفتگی</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ active_services }}</h4><small>سرویس فعال</small></div></div>
+    <div class="col-md-3"><div class="card stat-card p-3"><h4>{{ total_revenue|floatformat:0 }}</h4><small>درآمد (تومان)</small></div></div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="statusChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h5>پررزروترین سرویس‌ها</h5>
+        <ul class="list-group">
+        {% for s in top_services %}
+            <li class="list-group-item d-flex justify-content-between">{{ s.name }} <span class="badge bg-primary">{{ s.booking_count }}</span></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+new Chart(document.getElementById('statusChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{ label: 'تعداد رزرو', data: {{ chart_data|safe }}, backgroundColor: ['#ffc107','#198754','#dc3545','#6c757d'] }]
+    }
+});
+</script>
+{% endblock %}
