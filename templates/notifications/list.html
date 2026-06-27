@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}اعلان‌ها{% endblock %}
+{% block content %}
+<h2>اعلان‌ها</h2>
+<form method="post" action="{% url 'notifications:mark_all_read' %}" class="mb-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm btn-outline-secondary">علامت‌گذاری همه به عنوان خوانده‌شده</button>
+</form>
+<div class="list-group">
+{% for n in notifications %}
+    <a href="{% url 'notifications:mark_read' n.pk %}" class="list-group-item list-group-item-action {% if not n.is_read %}list-group-item-primary{% endif %}">
+        <div class="d-flex justify-content-between">
+            <strong>{{ n.get_notification_type_display }}</strong>
+            <small>{{ n.created_at|date:"Y/m/d H:i" }}</small>
+        </div>
+        <p class="mb-0">{{ n.message }}</p>
+    </a>
+{% empty %}
+    <p class="text-muted">اعلانی وجود ندارد</p>
+{% endfor %}
+</div>
+{% endblock %}

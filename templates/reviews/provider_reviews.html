@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}نظرات{% endblock %}
+{% block content %}
+<h2>نظرات سرویس‌های من</h2>
+{% for review in reviews %}
+<div class="border rounded p-3 mb-2">
+    <strong>{{ review.service.name }}</strong> - {{ review.customer.username }} - ★ {{ review.rating }}
+    <p>{{ review.comment }}</p>
+</div>
+{% empty %}
+<p class="text-muted">نظری ثبت نشده</p>
+{% endfor %}
+{% endblock %}

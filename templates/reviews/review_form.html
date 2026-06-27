@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}ثبت نظر{% endblock %}
+{% block content %}
+<h2>{% if edit %}ویرایش نظر{% else %}ثبت نظر{% endif %} - {{ booking.service.name }}</h2>
+<form method="post" class="col-md-6">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3">
+        <label class="form-label">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+</form>
+{% endblock %}

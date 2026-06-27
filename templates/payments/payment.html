@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}پرداخت{% endblock %}
+{% block content %}
+<h2>درگاه پرداخت (شبیه‌سازی)</h2>
+<div class="card col-md-6">
+    <div class="card-body">
+        <p><strong>سرویس:</strong> {{ booking.service.name }}</p>
+        <p><strong>مبلغ:</strong> {{ booking.price_snapshot|floatformat:0 }} تومان</p>
+        <p><strong>تاریخ:</strong> {{ booking.time_slot.start_datetime|date:"Y/m/d H:i" }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg w-100">پرداخت</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

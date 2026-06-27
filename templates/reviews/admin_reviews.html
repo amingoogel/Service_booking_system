@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}مدیریت نظرات{% endblock %}
+{% block content %}
+<h2>مدیریت نظرات</h2>
+{% for review in reviews %}
+<div class="border rounded p-3 mb-2 d-flex justify-content-between">
+    <div>
+        <strong>{{ review.service.name }}</strong> - {{ review.customer.username }} - ★ {{ review.rating }}
+        <p class="mb-0">{{ review.comment }}</p>
+    </div>
+    <form method="post" action="{% url 'reviews:admin_delete' review.pk %}">
+        {% csrf_token %}
+        <button class="btn btn-sm btn-danger">حذف</button>
+    </form>
+</div>
+{% endfor %}
+{% endblock %}
